@@ -1,0 +1,8 @@
+.ruff_cache/
+.venv/
+.idea/
+src/
+replica/
+poetry.lock
+pyproject.toml
+log.txt
