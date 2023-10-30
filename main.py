@@ -1,3 +1,16 @@
+""" Folder synchronization script
+
+This script allows the user to synchronize two folders to maintain a full,
+identical copy of source folder at destination folder.
+
+This tool accepts CLI arguments specifying the source and destination folder
+of the synchronization, path where the log_file will be created/updated
+and interval of the synchronization.
+
+This script requires no extra packages to be installed within the Python
+environment you are running this script in, as it only uses standard library.
+"""
+
 import os
 import shutil
 import filecmp
@@ -5,14 +18,19 @@ import datetime
 import time
 import argparse
 
+
 def remove_file(file, dst, log_path):
     """
-    removes a file from destination folder and logs the operation
-    :param file:
-    :param dst:
-    :param log_path:
-    :return:
+    Removes a file from destination folder and logs the operation
+    :param file: name of the file to be removed
+    :type file: str
+    :param dst: location of the synchronization destination folder from which the file will be deleted from
+    :type dst: str
+    :param log_path: location of the log file
+    :type log_path: str
+    :return: None
     """
+
     dst_file = os.path.join(dst, file)
     os.remove(dst_file)
     log(log_path, "removed from", file)
@@ -20,14 +38,19 @@ def remove_file(file, dst, log_path):
 
 def add_file(file, src, dest, log_path):
     """
-    copies a new file created in source folder to destination folder
+    Copies a new file created in source folder to destination folder
     and logs the operation
-    :param file:
-    :param src:
-    :param dest:
-    :param log_path:
-    :return:
+    :param file: name of the file that was created
+    :type file: str
+    :param src: location of the synchronization source folder in which the file was created
+    :type src: str
+    :param dest: location of the synchronization destination folder to which the file will be copied to
+    :type dest: str
+    :param log_path: location of the log file
+    :type log_path: str
+    :return: None
     """
+
     src_file = os.path.join(src, file)
     shutil.copy2(src_file, dest)
     log(log_path, "added to", file)
@@ -35,14 +58,19 @@ def add_file(file, src, dest, log_path):
 
 def update_file(file, src, dest, log_path):
     """
-    removes a file from destination folder and copies an updated file from
+    Removes a file from destination folder and copies an updated file from
     source to destination folder, then logs the operation
-    :param file:
-    :param src:
-    :param dest:
-    :param log_path:
-    :return:
+    :param file: name of the file that was updated
+    :type file: str
+    :param src: location of the synchronization source folder in which the file was updated
+    :type src: str
+    :param dest: location of the synchronization destination folder to which the file will be copied to
+    :type dest: str
+    :param log_path: location of the log file
+    :type log_path: str
+    :return: None
     """
+
     src_file = os.path.join(src, file)
     dest_file = os.path.join(dest, file)
     if not filecmp.cmp(src_file, dest_file):
@@ -53,14 +81,18 @@ def update_file(file, src, dest, log_path):
 
 def log(log_path, action, file):
     """
-    provides logging functionality to above functions, logs an operation
+    Provides logging functionality to above functions, logs an operation
     made in/on destination folder to a provided logfile and prints
     the same information on console
-    :param log_path:
-    :param action:
-    :param file:
-    :return:
+    :param log_path: location of the log file
+    :type log_path: str
+    :param action: message describing actions that were taken upon source and destination folders
+    :type action: str
+    :param file: name of the file that was updated
+    :type file: str
+    :return: None
     """
+
     msg = f"\n{datetime.datetime.now().replace(microsecond=0)} File {file} has been {action} source folder, destination folder has been synchronized."
     print(msg)
     f = open(f"{log_path}\sync_log.txt", "a")
@@ -70,10 +102,11 @@ def log(log_path, action, file):
 
 def main():
     """
-    main routine, provides the means to accept CLI arguments and calls
-    functions neccesary for synchronizing the provided folders and
+    Provides the means to accept CLI arguments and calls functions
+    neccesary for synchronizing the provided folders and
     logging the operations in requested frequency
     """
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "src", help="specifies the source folder path for synchronizing"
@@ -108,6 +141,6 @@ def main():
 
         time.sleep(args.sync_interval)
 
-# application entrypoint
+
 if __name__ == "__main__":
     main()
