@@ -1,5 +1,5 @@
 ﻿# Veeam_task
-My take on the applicable test task I was given by Veeam after applying for Junior Developer in QA  
+My take on the applicable test task I was given by Veeam while applying for Junior Developer in QA  
 
 Test Task was descripted as follows:
 Please implement a program that synchronizes two folders: source and
